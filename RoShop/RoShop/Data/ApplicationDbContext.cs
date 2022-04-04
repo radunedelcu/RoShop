@@ -8,7 +8,10 @@ namespace RoShop.Data
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
     }
-    public DbSet<User> Users { get; set; }
-    public DbSet<User> Roles { get; set; }
+    public DbSet<User> User { get; set; }
+    public DbSet<Role> Role { get; set; }
+    public DbSet<UserProduct> UserProduct { get; set; }
+    public DbSet<Product> Products { get; set; }
+
   }
 }

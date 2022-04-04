@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace RoShop.Models
 {
@@ -12,5 +13,7 @@ namespace RoShop.Models
     public string Password { get; set; }
     public int IdRole { get; set; }
     public Role Role { get; set; }
+    public ICollection<UserProduct> UserProducts { get; set; }
+
   }
 }

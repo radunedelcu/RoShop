@@ -19,6 +19,32 @@ namespace RoShop.Migrations
                 .HasAnnotation("ProductVersion", "5.0.15")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("RoShop.Models.Product", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Price")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserProductIdUserProduct")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserProductIdUserProduct");
+
+                    b.ToTable("Products");
+                });
+
             modelBuilder.Entity("RoShop.Models.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -66,6 +92,33 @@ namespace RoShop.Migrations
                     b.ToTable("User");
                 });
 
+            modelBuilder.Entity("RoShop.Models.UserProduct", b =>
+                {
+                    b.Property<int>("IdUserProduct")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("IdUser")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("IdUserProduct");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserProduct");
+                });
+
+            modelBuilder.Entity("RoShop.Models.Product", b =>
+                {
+                    b.HasOne("RoShop.Models.UserProduct", null)
+                        .WithMany("Products")
+                        .HasForeignKey("UserProductIdUserProduct");
+                });
+
             modelBuilder.Entity("RoShop.Models.User", b =>
                 {
                     b.HasOne("RoShop.Models.Role", "Role")
@@ -73,6 +126,25 @@ namespace RoShop.Migrations
                         .HasForeignKey("RoleId");
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("RoShop.Models.UserProduct", b =>
+                {
+                    b.HasOne("RoShop.Models.User", "User")
+                        .WithMany("UserProducts")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("RoShop.Models.User", b =>
+                {
+                    b.Navigation("UserProducts");
+                });
+
+            modelBuilder.Entity("RoShop.Models.UserProduct", b =>
+                {
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }
