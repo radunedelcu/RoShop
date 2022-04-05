@@ -27,6 +27,9 @@ namespace RoShop.Controllers
     {
       //if (!ModelState.IsValid)
       //{
+      Role role = _context.Role.Where(a => a.Name == "user").FirstOrDefault();
+      user.Role = role;
+      user.IdRole = role.Id;
       _context.User.Add(user);
       _context.SaveChanges();
       //}

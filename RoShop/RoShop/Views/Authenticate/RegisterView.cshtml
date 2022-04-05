@@ -27,6 +27,11 @@
         <label asp-for="@Model.Password" class="control-label"></label>
         <input asp-for="@Model.Password" type="password" class="form-control" value="" />
         <span asp-validation-for="@Model.Password" class="text-danger"></span>
+      </div> 
+      <div class="form-group">
+        <label asp-for="@Model.ConfirmPassword" class="control-label"></label>
+        <input asp-for="@Model.ConfirmPassword" type="password" class="form-control" value="" />
+        <span asp-validation-for="@Model.ConfirmPassword" class="text-danger"></span>
       </div>
       <div class="form-group">
         <input type="submit" value="Register" class="btn btn-primary" />
