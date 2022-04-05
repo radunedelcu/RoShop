@@ -27,8 +27,7 @@ namespace RoShop.Controllers
     {
       //if (!ModelState.IsValid)
       //{
-      User User = new User();
-      _context.User.Add(User);
+      _context.User.Add(user);
       _context.SaveChanges();
       //}
 
