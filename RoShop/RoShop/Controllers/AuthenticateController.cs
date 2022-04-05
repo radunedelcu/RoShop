@@ -40,8 +40,12 @@ namespace RoShop.Controllers
       _context.SaveChanges();
 
 
-      return RedirectToAction("RegisterView");
+      return RedirectToAction("LoginView");
 
+    }
+    public IActionResult LoginView()
+    {
+      return View();
     }
 
     private string ComputeHash(string input, HashAlgorithm algorithm)
