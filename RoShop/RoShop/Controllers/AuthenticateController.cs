@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RoShop.Data;
@@ -25,17 +28,29 @@ namespace RoShop.Controllers
 
     public IActionResult Register(User user)
     {
-      //if (!ModelState.IsValid)
-      //{
+      if (ModelState.IsValid && user.Password == user.ConfirmPassword)
+      {
+        user.Password = ComputeHash(user.Password, new SHA256CryptoServiceProvider());
+        user.ConfirmPassword = ComputeHash(user.ConfirmPassword, new SHA256CryptoServiceProvider());
+      }
       Role role = _context.Role.Where(a => a.Name == "user").FirstOrDefault();
       user.Role = role;
       user.IdRole = role.Id;
       _context.User.Add(user);
       _context.SaveChanges();
-      //}
+
 
       return RedirectToAction("RegisterView");
 
+    }
+
+    private string ComputeHash(string input, HashAlgorithm algorithm)
+    {
+      Byte[] inputBytes = Encoding.UTF8.GetBytes(input);
+
+      Byte[] hashedBytes = algorithm.ComputeHash(inputBytes);
+
+      return BitConverter.ToString(hashedBytes);
     }
 
 
