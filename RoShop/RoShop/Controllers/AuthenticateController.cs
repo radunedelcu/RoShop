@@ -2,16 +2,41 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RoShop.Data;
+using RoShop.Models;
 
 namespace RoShop.Controllers
 {
   public class AuthenticateController : Controller
   {
     private readonly ApplicationDbContext _context;
+
     public AuthenticateController(ApplicationDbContext applicationDbContext)
     {
       _context = applicationDbContext;
     }
+
+    public ActionResult RegisterView()
+    {
+      return View();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+
+    public IActionResult Register(User user)
+    {
+      //if (!ModelState.IsValid)
+      //{
+      User User = new User();
+      _context.User.Add(User);
+      _context.SaveChanges();
+      //}
+
+      return RedirectToAction("RegisterView");
+
+    }
+
+
     // GET: AuthenticateController
     public ActionResult Index()
     {
