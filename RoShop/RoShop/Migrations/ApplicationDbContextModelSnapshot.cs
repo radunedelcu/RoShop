@@ -42,7 +42,7 @@ namespace RoShop.Migrations
 
                     b.HasIndex("UserProductIdUserProduct");
 
-                    b.ToTable("Products");
+                    b.ToTable("Product");
                 });
 
             modelBuilder.Entity("RoShop.Models.Role", b =>
@@ -114,9 +114,12 @@ namespace RoShop.Migrations
 
             modelBuilder.Entity("RoShop.Models.Product", b =>
                 {
-                    b.HasOne("RoShop.Models.UserProduct", null)
+                    b.HasOne("RoShop.Models.UserProduct", "UserProduct")
                         .WithMany("Products")
-                        .HasForeignKey("UserProductIdUserProduct");
+                        .HasForeignKey("UserProductIdUserProduct")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("UserProduct");
                 });
 
             modelBuilder.Entity("RoShop.Models.User", b =>
@@ -132,7 +135,8 @@ namespace RoShop.Migrations
                 {
                     b.HasOne("RoShop.Models.User", "User")
                         .WithMany("UserProducts")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("User");
                 });

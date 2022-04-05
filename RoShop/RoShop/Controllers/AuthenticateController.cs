@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RoShop.Data;
 
@@ -14,7 +15,7 @@ namespace RoShop.Controllers
     // GET: AuthenticateController
     public ActionResult Index()
     {
-
+      var test = _context.Role.ToList();
       return View();
     }
 
