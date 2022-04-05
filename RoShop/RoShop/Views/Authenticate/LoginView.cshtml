@@ -1,0 +1,26 @@
+﻿@model RoShop.ViewModel.LoginViewModel
+
+<br />
+
+<div class="card border-secondary mb-3">
+  <div class="card-body text-secondary">
+    <form asp-action="Login" method="post">
+      <div asp-validation-summary="ModelOnly" class="text-danger">
+        <span>Please correct the following errors</span>
+      </div>
+      <div class="form-group">
+        <label asp-for="@Model.Email" class="control-label"></label>
+        <input asp-for="@Model.Email" class="form-control" />
+        <span asp-validation-for="@Model.Email" class="text-danger"></span>
+      </div>
+      <div class="form-group">
+        <label asp-for="@Model.Password" class="control-label"></label>
+        <input asp-for="@Model.Password" type="password" class="form-control" value="" />
+        <span asp-validation-for="@Model.Password" class="text-danger"></span>
+      </div>
+      <div class="form-group">
+        <input type="submit" value="Login" class="btn btn-primary" />
+      </div>
+    </form>
+  </div>
+</div>
