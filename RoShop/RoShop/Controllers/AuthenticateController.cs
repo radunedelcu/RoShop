@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RoShop.Data;
 using RoShop.Models;
+using RoShop.ViewModel;
 
 namespace RoShop.Controllers
 {
@@ -48,6 +49,19 @@ namespace RoShop.Controllers
       return View();
     }
 
+    public IActionResult Login(LoginViewModel loginViewModel)
+    {
+      User user = _context.User.Where(a => a.Email == loginViewModel.Email).SingleOrDefault();
+      if (user != null)
+      {
+        var hashpassword = ComputeHash(loginViewModel.Password, new SHA256CryptoServiceProvider());
+        if (hashpassword == user.Password)
+        {
+          //TODO implement
+        }
+      }
+      return RedirectToAction("LoginView");
+    }
     private string ComputeHash(string input, HashAlgorithm algorithm)
     {
       Byte[] inputBytes = Encoding.UTF8.GetBytes(input);
@@ -56,6 +70,7 @@ namespace RoShop.Controllers
 
       return BitConverter.ToString(hashedBytes);
     }
+
 
 
     // GET: AuthenticateController
