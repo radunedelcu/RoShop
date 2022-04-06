@@ -57,6 +57,9 @@ namespace RoShop.Controllers
     [HttpPost]
     public async Task<IActionResult> LoginAsync(LoginViewModel loginViewModel)
     {
+      if (isloggedIn(HttpContext) == true)
+        await LogOut();
+      if (!ModelState.IsValid) { return RedirectToAction("LoginView"); }
       User user = _context.User.Where(a => a.Email == loginViewModel.Email).SingleOrDefault();
       if (user != null)
       {
@@ -81,7 +84,26 @@ namespace RoShop.Controllers
       return RedirectToAction("LoginView");
     }
 
-    //Hash function for encrypting password
+    public bool isloggedIn(HttpContext httpcontext)
+    {
+      var email = httpcontext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
+      if (email != null)
+        return true;
+      return false;
+    }
+
+    public async Task<IActionResult> LogOut()
+    {
+      await HttpContext.SignOutAsync();
+      return RedirectToAction("Index", "Home");
+    }
+
+    /// <summary>
+    /// Hash function for encrypting password
+    /// </summary>
+    /// <param name="input"></param>
+    /// <param name="algorithm"></param>
+    /// <returns></returns>
     private string ComputeHash(string input, HashAlgorithm algorithm)
     {
       Byte[] inputBytes = Encoding.UTF8.GetBytes(input);

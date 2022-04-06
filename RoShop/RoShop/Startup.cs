@@ -37,7 +37,7 @@ namespace RoShop
       services.AddAuthentication("CookieAuth").AddCookie("CookieAuth", config =>
       {
         config.Cookie.Name = "User.cookie";
-        config.LoginPath = "/Authenticate/LogIn";
+        config.LoginPath = "/Authenticate/LoginView";
         config.LogoutPath = "/Authenticate/LogOut";
       });
       services.AddControllersWithViews();
