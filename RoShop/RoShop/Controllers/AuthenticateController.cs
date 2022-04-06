@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RoShop.Data;
@@ -29,6 +33,7 @@ namespace RoShop.Controllers
 
     public IActionResult Register(User user)
     {
+      //TODO email should not be the same
       if (ModelState.IsValid && user.Password == user.ConfirmPassword)
       {
         user.Password = ComputeHash(user.Password, new SHA256CryptoServiceProvider());
@@ -49,7 +54,8 @@ namespace RoShop.Controllers
       return View();
     }
 
-    public IActionResult Login(LoginViewModel loginViewModel)
+    [HttpPost]
+    public async Task<IActionResult> LoginAsync(LoginViewModel loginViewModel)
     {
       User user = _context.User.Where(a => a.Email == loginViewModel.Email).SingleOrDefault();
       if (user != null)
@@ -58,10 +64,24 @@ namespace RoShop.Controllers
         if (hashpassword == user.Password)
         {
           //TODO implement
+          Role role = _context.Role.Where(a => a.Id == user.IdRole).SingleOrDefault();
+
+          var userClaim = new List<Claim>()
+                    {
+                        new Claim(ClaimTypes.Email, user.Email),
+                        new Claim(ClaimTypes.Role, role.Name)
+                    };
+          var userIdentity = new ClaimsIdentity(userClaim, "user identity");
+
+          var userPrinciple = new ClaimsPrincipal(new[] { userIdentity });
+
+          await HttpContext.SignInAsync(userPrinciple);
         }
       }
       return RedirectToAction("LoginView");
     }
+
+    //Hash function for encrypting password
     private string ComputeHash(string input, HashAlgorithm algorithm)
     {
       Byte[] inputBytes = Encoding.UTF8.GetBytes(input);
