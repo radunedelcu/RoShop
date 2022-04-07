@@ -1,13 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using RoShop.Data;
 
 namespace RoShop
 {
@@ -23,7 +21,29 @@ namespace RoShop
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
+      services.AddDbContext<ApplicationDbContext>(
+          options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+      services.AddDistributedMemoryCache();
+
+      services.AddSession(options =>
+      {
+        // Set a short timeout for easy testing.
+        options.IdleTimeout = TimeSpan.FromMinutes(10);
+        options.Cookie.HttpOnly = true;
+        // Make the session cookie essential
+        options.Cookie.IsEssential = true;
+      });
+
+      //Cokie
+      services.AddAuthentication("CookieAuth").AddCookie("CookieAuth", config =>
+      {
+        config.Cookie.Name = "User.cookie";
+        config.LoginPath = "/Authenticate/LoginView";
+        config.LogoutPath = "/Authenticate/LogOut";
+      });
       services.AddControllersWithViews();
+      services.AddMemoryCache();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -36,22 +56,20 @@ namespace RoShop
       else
       {
         app.UseExceptionHandler("/Home/Error");
-        // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+        // The default HSTS value is 30 days. You may want to change this for production scenarios, see
+        // https://aka.ms/aspnetcore-hsts.
         app.UseHsts();
       }
       app.UseHttpsRedirection();
       app.UseStaticFiles();
-
+      app.UseSession();
       app.UseRouting();
-
+      app.UseAuthentication();
       app.UseAuthorization();
 
-      app.UseEndpoints(endpoints =>
-      {
-        endpoints.MapControllerRoute(
-                  name: "default",
-                  pattern: "{controller=Home}/{action=Index}/{id?}");
-      });
+      app.UseEndpoints(
+          endpoints =>
+          { endpoints.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}"); });
     }
   }
 }
