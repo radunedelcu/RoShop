@@ -34,17 +34,23 @@ namespace RoShop.Controllers
     public IActionResult Register(User user)
     {
       //TODO email should not be the same
+      User usedMailUser = _context.User.Where(a => a.Email == user.Email).SingleOrDefault();
+
+      if (usedMailUser != null)
+      {
+        ModelState.AddModelError("", "This email is already used");
+        return View();
+      }
       if (ModelState.IsValid && user.Password == user.ConfirmPassword)
       {
         user.Password = ComputeHash(user.Password, new SHA256CryptoServiceProvider());
         user.ConfirmPassword = ComputeHash(user.ConfirmPassword, new SHA256CryptoServiceProvider());
+        Role role = _context.Role.Where(a => a.Name == "user").FirstOrDefault();
+        user.Role = role;
+        user.IdRole = role.Id;
+        _context.User.Add(user);
+        _context.SaveChanges();
       }
-      Role role = _context.Role.Where(a => a.Name == "user").FirstOrDefault();
-      user.Role = role;
-      user.IdRole = role.Id;
-      _context.User.Add(user);
-      _context.SaveChanges();
-
 
       return RedirectToAction("Login");
 
