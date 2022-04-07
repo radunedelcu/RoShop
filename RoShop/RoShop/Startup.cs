@@ -24,10 +24,12 @@ namespace RoShop
       services.AddDbContext<ApplicationDbContext>(
           options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+      services.AddDistributedMemoryCache();
+
       services.AddSession(options =>
       {
         // Set a short timeout for easy testing.
-        options.IdleTimeout = TimeSpan.FromSeconds(10);
+        options.IdleTimeout = TimeSpan.FromMinutes(10);
         options.Cookie.HttpOnly = true;
         // Make the session cookie essential
         options.Cookie.IsEssential = true;
@@ -41,6 +43,7 @@ namespace RoShop
         config.LogoutPath = "/Authenticate/LogOut";
       });
       services.AddControllersWithViews();
+      services.AddMemoryCache();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,9 +62,9 @@ namespace RoShop
       }
       app.UseHttpsRedirection();
       app.UseStaticFiles();
-
+      app.UseSession();
       app.UseRouting();
-
+      app.UseAuthentication();
       app.UseAuthorization();
 
       app.UseEndpoints(

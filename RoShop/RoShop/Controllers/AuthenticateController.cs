@@ -55,7 +55,8 @@ namespace RoShop.Controllers
     }
 
     [HttpPost]
-    public async Task<IActionResult> LoginAsync(LoginViewModel loginViewModel)
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Login(LoginViewModel loginViewModel)
     {
       if (isloggedIn(HttpContext) == true)
         await LogOut();
@@ -71,6 +72,7 @@ namespace RoShop.Controllers
 
           var userClaim = new List<Claim>()
                     {
+                        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                         new Claim(ClaimTypes.Email, user.Email),
                         new Claim(ClaimTypes.Role, role.Name)
                     };
