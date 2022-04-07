@@ -23,7 +23,7 @@ namespace RoShop.Controllers
       _context = applicationDbContext;
     }
 
-    public ActionResult RegisterView()
+    public ActionResult Register()
     {
       return View();
     }
@@ -46,10 +46,10 @@ namespace RoShop.Controllers
       _context.SaveChanges();
 
 
-      return RedirectToAction("LoginView");
+      return RedirectToAction("Login");
 
     }
-    public IActionResult LoginView()
+    public IActionResult Login()
     {
       return View();
     }
@@ -60,7 +60,7 @@ namespace RoShop.Controllers
     {
       if (isloggedIn(HttpContext) == true)
         await LogOut();
-      if (!ModelState.IsValid) { return RedirectToAction("LoginView"); }
+      if (!ModelState.IsValid) { return RedirectToAction("Login"); }
       User user = _context.User.Where(a => a.Email == loginViewModel.Email).SingleOrDefault();
       if (user != null)
       {
@@ -82,8 +82,12 @@ namespace RoShop.Controllers
 
           await HttpContext.SignInAsync(userPrinciple);
         }
+        else
+        {
+          ModelState.AddModelError("", "Email or password are incorrect");
+        }
       }
-      return RedirectToAction("LoginView");
+      return View();
     }
 
     public bool isloggedIn(HttpContext httpcontext)
