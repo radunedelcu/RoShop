@@ -46,6 +46,14 @@ namespace RoShop.Controllers
         User user = _context.User.Where(a => a.Email == email).SingleOrDefault();
         userProduct.IdUser = user.Id;
         userProduct.User = user;
+        _context.UserProduct.Add(userProduct);
+        _context.SaveChanges();
+
+        obj.UserProduct = userProduct;
+        obj.IdUserProduct = userProduct.IdUserProduct;
+        _context.Product.Update(obj);
+        _context.SaveChanges();
+
         return RedirectToAction("Index");
       }
       return View(obj);
