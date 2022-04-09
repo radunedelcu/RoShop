@@ -1,9 +1,9 @@
-﻿@model RoShop.Models.Product
+﻿@model ProductImageViewModel
 <br />
 
 <div class="card border-secondary mb-3">
   <div class="card-body text-secondary">
-    <form asp-action="Create" method="post">
+    <form asp-action="Create" enctype="multipart/form-data" method="post">
       <div asp-validation-summary="ModelOnly" class="text-danger">
         <span>Please correct the following errors</span>
       </div>
@@ -13,18 +13,26 @@
         <span asp-validation-for="@Model.Name" class="text-danger"></span>
       </div>
       <div class="form-group">
-        <label asp-for="@Model.Price" class="control-label"></label>
-        <input asp-for="@Model.Price" class="form-control" />
-        <span asp-validation-for="@Model.Price" class="text-danger"></span>
+        <label asp-for="@Model.Image" class="control-label"></label>
+        <div class="custom-file">
+          <input asp-for="@Model.Image" class="custom-file-input" id="customFile">
+          <label class="custom-file-label" for="customFile">Choose file</label>
+        </div>
+        <span asp-validation-for="@Model.Image" class="text-danger"></span>
       </div>
-      <div class="form-group">
-        <label asp-for="@Model.Description" class="control-label"></label>
-        <input asp-for="@Model.Description" class="form-control" />
-        <span asp-validation-for="@Model.Description" class="text-danger"></span>
-      </div>
-      <div class="form-group">
-        <input type="submit" value="Create" class="btn btn-primary" />
-      </div>
-    </form>
+  <div class="form-group">
+    <label asp-for="@Model.Price" class="control-label"></label>
+    <input asp-for="@Model.Price" class="form-control" />
+    <span asp-validation-for="@Model.Price" class="text-danger"></span>
   </div>
+  <div class="form-group">
+    <label asp-for="@Model.Description" class="control-label"></label>
+    <input asp-for="@Model.Description" class="form-control" />
+    <span asp-validation-for="@Model.Description" class="text-danger"></span>
+  </div>
+  <div class="form-group">
+    <input type="submit" value="Create" class="btn btn-primary" />
+  </div>
+  </form>
+</div>
 </div>
