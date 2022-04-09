@@ -28,7 +28,13 @@ namespace RoShop.Controllers
         _context.ProductFile,
         u => u.IdProductFile,
         z => z.Id,
-        (u, z) => new Product() { Description = u.Description, Name = u.Name, ProductFile = z }).ToList();
+        (u, z) => new Product()
+        {
+          Description = u.Description,
+          Price = u.Price,
+          Name = u.Name,
+          ProductFile = z
+        }).ToList();
       return View(objList);
     }
 

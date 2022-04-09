@@ -8,7 +8,8 @@
   {
     <div class="col mb-4">
       <div class="card">
-        <img class="card-img-top" src="data:image/jpeg;base64,@Convert.ToBase64String(product.ProductFile.DataFiles)" />
+        <img class="card-img-top" src="data:image/jpeg;base64,
+             @Convert.ToBase64String(product.ProductFile.DataFiles)" />
         <div class="card-body">
           <h5 class="card-title">@product.Name</h5>
           <p class="card-text">Price: @product.Price</p>
