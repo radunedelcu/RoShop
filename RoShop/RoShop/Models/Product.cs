@@ -10,5 +10,6 @@ namespace RoShop.Models
     public int Price { get; set; }
     public string Description { get; set; }
     public UserProduct UserProduct { get; set; }
+    public int IdUserProduct { get; set; }
   }
 }
