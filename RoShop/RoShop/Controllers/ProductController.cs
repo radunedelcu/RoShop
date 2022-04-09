@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using RoShop.Data;
 using RoShop.Models;
 using RoShop.ViewModel;
@@ -23,7 +24,11 @@ namespace RoShop.Controllers
     }
     public IActionResult Index()
     {
-      IEnumerable<Product> objList = _context.Product;
+      IEnumerable<Product> objList = _context.Product.AsNoTracking().Join(
+        _context.ProductFile,
+        u => u.IdProductFile,
+        z => z.Id,
+        (u, z) => new Product() { Description = u.Description, Name = u.Name, ProductFile = z }).ToList();
       return View(objList);
     }
 
