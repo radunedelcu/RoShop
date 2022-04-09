@@ -13,6 +13,8 @@ namespace RoShop.Data
     public DbSet<UserProduct> UserProduct { get; set; }
     public DbSet<Product> Product { get; set; }
 
+    public DbSet<ProductFile> ProductFile { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
       modelBuilder.Entity<User>().HasMany(e => e.UserProducts).WithOne(e => e.User).OnDelete(DeleteBehavior.NoAction);
@@ -22,6 +24,7 @@ namespace RoShop.Data
       modelBuilder.Entity<Role>().ToTable("Role");
       modelBuilder.Entity<UserProduct>().ToTable("UserProduct");
       modelBuilder.Entity<Product>().ToTable("Product");
+      modelBuilder.Entity<ProductFile>().ToTable("ProductFile");
 
     }
   }
