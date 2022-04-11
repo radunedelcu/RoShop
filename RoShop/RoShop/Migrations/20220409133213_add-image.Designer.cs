@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RoShop.Data;
 
 namespace RoShop.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220409133213_add-image")]
+    partial class addimage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,9 +31,6 @@ namespace RoShop.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("IdProductFile")
-                        .HasColumnType("int");
-
                     b.Property<int>("IdUserProduct")
                         .HasColumnType("int");
 
@@ -41,45 +40,14 @@ namespace RoShop.Migrations
                     b.Property<int>("Price")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ProductFileId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("UserProductIdUserProduct")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductFileId");
-
                     b.HasIndex("UserProductIdUserProduct");
 
                     b.ToTable("Product");
-                });
-
-            modelBuilder.Entity("RoShop.Models.ProductFile", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<byte[]>("DataFiles")
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("FileType")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ProductFile");
                 });
 
             modelBuilder.Entity("RoShop.Models.Role", b =>
@@ -159,16 +127,10 @@ namespace RoShop.Migrations
 
             modelBuilder.Entity("RoShop.Models.Product", b =>
                 {
-                    b.HasOne("RoShop.Models.ProductFile", "ProductFile")
-                        .WithMany()
-                        .HasForeignKey("ProductFileId");
-
                     b.HasOne("RoShop.Models.UserProduct", "UserProduct")
                         .WithMany("Products")
                         .HasForeignKey("UserProductIdUserProduct")
                         .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("ProductFile");
 
                     b.Navigation("UserProduct");
                 });
