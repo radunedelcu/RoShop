@@ -30,6 +30,7 @@ namespace RoShop.Controllers
         z => z.Id,
         (u, z) => new Product()
         {
+          Id = u.Id,
           Description = u.Description,
           Price = u.Price,
           Name = u.Name,
@@ -103,6 +104,37 @@ namespace RoShop.Controllers
         return RedirectToAction("Index");
       }
       return View();
+    }
+
+    [HttpGet]
+    public IActionResult Delete(int? id)
+    {
+
+      if (id == null || id == 0)
+      {
+        return NotFound();
+      }
+      var obj = _context.Product.Find(id);
+      if (obj == null)
+      {
+        return NotFound();
+      }
+      return View(obj);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult DeleteProduct(int id)
+    {
+      var obj = _context.Product.Find(id);
+      if (obj == null)
+      {
+        return NotFound();
+      }
+
+      _context.Product.Remove(obj);
+      _context.SaveChanges();
+      return RedirectToAction("Index");
     }
   }
 }
