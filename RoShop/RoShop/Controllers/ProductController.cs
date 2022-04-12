@@ -114,7 +114,18 @@ namespace RoShop.Controllers
       {
         return NotFound();
       }
-      var obj = _context.Product.Find(id);
+      var obj = _context.Product.AsNoTracking().Join(
+        _context.ProductFile,
+        u => u.IdProductFile,
+        z => z.Id,
+        (u, z) => new Product()
+        {
+          Id = u.Id,
+          Description = u.Description,
+          Price = u.Price,
+          Name = u.Name,
+          ProductFile = z
+        }).ToList().Where(a => a.Id == id).SingleOrDefault();
       if (obj == null)
       {
         return NotFound();
@@ -127,6 +138,7 @@ namespace RoShop.Controllers
     public IActionResult DeleteProduct(int id)
     {
       var obj = _context.Product.Find(id);
+
       if (obj == null)
       {
         return NotFound();
@@ -135,6 +147,34 @@ namespace RoShop.Controllers
       _context.Product.Remove(obj);
       _context.SaveChanges();
       return RedirectToAction("Index");
+    }
+
+    public IActionResult Edit(int? id)
+    {
+
+      if (id == null || id == 0)
+      {
+        return NotFound();
+      }
+      var obj = _context.Product.Find(id);
+      if (obj == null)
+      {
+        return NotFound();
+      }
+      return View(obj);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Edit(Product obj)
+    {
+      if (ModelState.IsValid)
+      {
+        _context.Product.Update(obj);
+        _context.SaveChanges();
+        return RedirectToAction("Index");
+      }
+      return View(obj);
     }
   }
 }

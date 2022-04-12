@@ -15,6 +15,7 @@
           <p class="card-text">Price: @product.Price</p>
           <p class="card-text">Description: @product.Description</p>
           <a asp-controller="Product" asp-action="Delete" asp-route-Id="@product.Id" class="btn btn-danger mx-1">Delete</a>
+          <a asp-controller="Product" asp-action="Edit" asp-route-Id="@product.Id" class="btn btn-primary mx-1">Edit</a>
         </div>
       </div>
     </div>
