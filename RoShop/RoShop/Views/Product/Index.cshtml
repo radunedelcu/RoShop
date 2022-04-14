@@ -1,9 +1,19 @@
 ﻿@model IEnumerable<RoShop.Models.Product>
+@{
+  @using System.Security.Claims
+  @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+  var userRole = HttpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value;
+  
 
+}
+
+@if (userRole == "admin")
+{ 
 <a asp-controller="Product" asp-action="Create" class="btn btn-success btn-lg m-lg-3">Create</a>
+}
+
 <br />
 <div class="card-columns">
-
   @foreach (var product in Model)
   {
     <div class="col mb-4">
@@ -14,8 +24,11 @@
           <h5 class="card-title">@product.Name</h5>
           <p class="card-text">Price: @product.Price</p>
           <p class="card-text">Description: @product.Description</p>
-          <a asp-controller="Product" asp-action="Delete" asp-route-Id="@product.Id" class="btn btn-danger mx-1">Delete</a>
+          @if (userRole == "admin")
+          {
+            <a asp-controller="Product" asp-action="Delete" asp-route-Id="@product.Id" class="btn btn-danger mx-1">Delete</a>
           <a asp-controller="Product" asp-action="Edit" asp-route-Id="@product.Id" class="btn btn-primary mx-1">Edit</a>
+          }
         </div>
       </div>
     </div>

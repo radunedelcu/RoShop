@@ -12,7 +12,7 @@ using RoShop.ViewModel;
 
 namespace RoShop.Controllers
 {
-  [Authorize(Roles = "admin")]
+
 
   public class ProductController : Controller
   {
@@ -40,6 +40,7 @@ namespace RoShop.Controllers
     }
 
     [HttpGet]
+    [Authorize(Roles = "admin")]
     public IActionResult Create()
     {
       return View();
@@ -47,7 +48,7 @@ namespace RoShop.Controllers
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-
+    [Authorize(Roles = "admin")]
     public IActionResult Create(ProductImageViewModel productImageViewModel)
     {
 
@@ -107,6 +108,7 @@ namespace RoShop.Controllers
     }
 
     [HttpGet]
+    [Authorize(Roles = "admin")]
     public IActionResult Delete(int? id)
     {
 
@@ -135,6 +137,7 @@ namespace RoShop.Controllers
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "admin")]
     public IActionResult DeleteProduct(int id)
     {
       var obj = _context.Product.Find(id);
@@ -149,6 +152,7 @@ namespace RoShop.Controllers
       return RedirectToAction("Index");
     }
 
+    [Authorize(Roles = "admin")]
     public IActionResult Edit(int? id)
     {
 
@@ -185,6 +189,7 @@ namespace RoShop.Controllers
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "admin")]
     public IActionResult Edit(ProductImageViewModel productImageViewModel)
     {
       if (ModelState.IsValid)

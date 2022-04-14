@@ -1,9 +1,11 @@
 using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using RoShop.Data;
 
@@ -25,7 +27,7 @@ namespace RoShop
           options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
       services.AddDistributedMemoryCache();
-
+      services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
       services.AddSession(options =>
       {
         // Set a short timeout for easy testing.
