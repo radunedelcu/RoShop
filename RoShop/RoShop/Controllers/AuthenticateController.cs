@@ -93,7 +93,7 @@ namespace RoShop.Controllers
           ModelState.AddModelError("", "Email or password are incorrect");
         }
       }
-      return View();
+      return RedirectToAction("Index", "Home");
     }
 
     public bool isloggedIn(HttpContext httpcontext)
