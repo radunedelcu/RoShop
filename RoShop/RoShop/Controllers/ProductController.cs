@@ -229,5 +229,32 @@ namespace RoShop.Controllers
       }
       return View(productImageViewModel);
     }
+
+    public IActionResult ViewDetails(int id)
+    {
+      if (id == null || id == 0)
+      {
+        return NotFound();
+      }
+      var obj = _context.Product.AsNoTracking().Join(
+        _context.ProductFile,
+        u => u.IdProductFile,
+        z => z.Id,
+        (u, z) => new Product()
+        {
+          Id = u.Id,
+          Description = u.Description,
+          Price = u.Price,
+          Name = u.Name,
+          Colour = u.Colour,
+          Material = u.Material,
+          ProductFile = z
+        }).ToList().Where(a => a.Id == id).SingleOrDefault();
+      if (obj == null)
+      {
+        return NotFound();
+      }
+      return View(obj);
+    }
   }
 }

@@ -27,8 +27,9 @@
           @if (userRole == "admin")
           {
             <a asp-controller="Product" asp-action="Delete" asp-route-Id="@product.Id" class="btn btn-danger mx-1">Delete</a>
-          <a asp-controller="Product" asp-action="Edit" asp-route-Id="@product.Id" class="btn btn-primary mx-1">Edit</a>
+            <a asp-controller="Product" asp-action="Edit" asp-route-Id="@product.Id" class="btn btn-primary mx-1">Edit</a>
           }
+          <a asp-controller="Product" asp-action="ViewDetails" asp-route-Id="@product.Id" class="btn btn-danger mx-1">View Details</a>
         </div>
       </div>
     </div>
