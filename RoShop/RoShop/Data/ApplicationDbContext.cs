@@ -14,17 +14,20 @@ namespace RoShop.Data
     public DbSet<Product> Product { get; set; }
 
     public DbSet<ProductFile> ProductFile { get; set; }
+    public DbSet<Comment> Comment { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
       modelBuilder.Entity<User>().HasMany(e => e.UserProducts).WithOne(e => e.User).OnDelete(DeleteBehavior.NoAction);
       modelBuilder.Entity<UserProduct>().HasMany(e => e.Products).WithOne(e => e.UserProduct).OnDelete(DeleteBehavior.NoAction);
+      modelBuilder.Entity<Product>().HasMany(e => e.Comments).WithOne(e => e.Product).OnDelete(DeleteBehavior.NoAction);
 
       modelBuilder.Entity<User>().ToTable("User");
       modelBuilder.Entity<Role>().ToTable("Role");
       modelBuilder.Entity<UserProduct>().ToTable("UserProduct");
       modelBuilder.Entity<Product>().ToTable("Product");
       modelBuilder.Entity<ProductFile>().ToTable("ProductFile");
+      modelBuilder.Entity<Comment>().ToTable("Comment");
 
     }
   }

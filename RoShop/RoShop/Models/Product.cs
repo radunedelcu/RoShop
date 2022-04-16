@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace RoShop.Models
 {
@@ -16,5 +17,7 @@ namespace RoShop.Models
     public int IdProductFile { get; set; }
 
     public ProductFile ProductFile { get; set; }
+
+    public ICollection<Comment> Comments { get; set; }
   }
 }
