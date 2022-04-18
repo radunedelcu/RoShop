@@ -230,7 +230,7 @@ namespace RoShop.Controllers
       return View(productImageViewModel);
     }
 
-    public IActionResult ViewDetails(int id)
+    public IActionResult ViewDetails(int? id)
     {
       if (id == null || id == 0)
       {
@@ -246,15 +246,21 @@ namespace RoShop.Controllers
           Description = u.Description,
           Price = u.Price,
           Name = u.Name,
-          Colour = u.Colour,
-          Material = u.Material,
           ProductFile = z
         }).ToList().Where(a => a.Id == id).SingleOrDefault();
+
       if (obj == null)
       {
         return NotFound();
       }
-      return View(obj);
+      ProductCommentViewModel productCommentViewModel = new ProductCommentViewModel();
+      productCommentViewModel.Product = new Product();
+      productCommentViewModel.Product.Name = obj.Name;
+      productCommentViewModel.Product.Price = obj.Price;
+      productCommentViewModel.Product.Description = obj.Description;
+      productCommentViewModel.Product.ProductFile = obj.ProductFile;
+
+      return View(productCommentViewModel);
     }
   }
 }

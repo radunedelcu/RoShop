@@ -13,6 +13,7 @@ namespace RoShop.Models
     public int Id { get; set; }
     public string Content { get; set; }
     public string UserEmail { get; set; }
+    public int IdProduct { get; set; }
     public Product Product { get; set; }
     public DateTime? CreatedOn { get; set; }
   }
