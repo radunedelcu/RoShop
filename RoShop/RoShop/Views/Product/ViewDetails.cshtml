@@ -1,8 +1,6 @@
 ﻿@model ProductCommentViewModel
 
-  <!DOCTYPE html>
-  <html lang="en">
-  <head>
+  
   <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
   <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 
@@ -12,9 +10,7 @@
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
 
-  </head>
-
-  <body>
+ 
 
     <div class="container">
       <div class="card">
@@ -46,7 +42,7 @@
                 <button class="like btn btn-default" type="button"><span class="fa fa-heart"></span></button>
               </div>
               <div>
-                <a asp-controller="Product" asp-action="Index" class="btn btn-success btn-lg m-lg-3">Back</a>
+                <a asp-controller="Product" asp-action="Index" class="btn btn-outline-secondary btn-sm">Back</a>
               </div>
             </div>
           </div>
@@ -55,37 +51,44 @@
     </div>
     <br />
     <br />
-      <div class="container">
-        <div class="col-lg-4 col-sm-6 text-center">
-          <div class="well">
-            <h4>Write a review</h4>
-            <form asp-action="ViewDetails" method="post">
-              <input asp-for="@Model.IdProduct" hidden />
-              <div class="form-group">
-                <label asp-for="@Model.Content" class="control-label"></label>
-                <input asp-for="@Model.Content" class="form-control" />
-                <span asp-validation-for="@Model.Content" class="text-danger"></span>
+      
+      <div class="row d-flex justify-content">
+        <div class="col-md-8 col-lg-12">
+          <div class="card shadow-0 border" style="background-color: #f0f2f5;">
+            <div class="card-body p-4">
+              <div class="form-outline mb-4">
+                <form asp-action="ViewDetails" method="post">
+                  <input asp-for="@Model.IdProduct" hidden />
+                  <div class="form-group">
+                    <label asp-for="@Model.Content" class="control-label">Comments</label>
+                    <input asp-for="@Model.Content" class="form-control" />
+                    <span asp-validation-for="@Model.Content" class="text-danger"></span>
+                  </div>
+                  <div class="form-group">
+                    <input type="submit" value="Add" class="btn btn-primary" />
+                  </div>
+                </form>
               </div>
-              <div class="form-group">
-                <input type="submit" value="Add" class="btn btn-primary" />
-              </div>
-            </form>
-            <hr data-brackets-id="12673">
 
-            @foreach (var comment in Model.Product.Comments)
-            {
+              @foreach (var comment in Model.Product.Comments)
+      {
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                      <div class="d-flex flex-row align-items-center">
+                        <p class="small mb-0 ms-2">@comment.UserEmail</p>
+                      </div>
+                      <div class="d-flex flex-row align-items-center">
+                        <p class="small text-muted mb-0">@comment.CreatedOn</p>
+                      </div>
+                    </div>
+                    <p>@comment.Content</p>
+                  </div>
+                </div>
 
-              <ul data-brackets-id="12674" id="sortable" class="list-unstyled ui-sortable">
-                <strong class="pull-left primary-font">@comment.UserEmail</strong>
-                <small class="pull-right text-muted">
-                  <span class="glyphicon glyphicon-time"></span>
-                </small>
-                <br />
-                <li class="ui-state-default">@comment.Content</li>
-              </ul>
-
-            }
+      }
+            </div>
           </div>
         </div>
-  </body>
-</html>
+      </div>
+
