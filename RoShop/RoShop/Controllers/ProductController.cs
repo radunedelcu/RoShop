@@ -253,16 +253,33 @@ namespace RoShop.Controllers
       List<Comment> comments = _context.Comment.Where(a => a.IdProduct == obj.Id).ToList();
       obj.Comments = comments;
 
+      ProductCommentViewModel productCommentViewModel = new ProductCommentViewModel();
+      productCommentViewModel.Product = obj;
+      productCommentViewModel.IdProduct = obj.Id;
+
       if (obj == null)
       {
         return NotFound();
       }
 
-      return View(obj);
+      return View(productCommentViewModel);
     }
 
-    public IActionResult ViewDetails()
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult ViewDetails(ProductCommentViewModel productCommentViewModel)
+    {
 
-
+      Comment comment = new Comment();
+      Product product = _context.Product.Where(a => a.Id == productCommentViewModel.IdProduct).SingleOrDefault();
+      var userEmail = HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
+      comment.IdProduct = product.Id;
+      comment.Product = product;
+      comment.UserEmail = userEmail;
+      comment.Content = productCommentViewModel.Content;
+      _context.Comment.Add(comment);
+      _context.SaveChanges();
+      return RedirectToAction("ViewDetails", new { id = product.Id });
+    }
   }
 }

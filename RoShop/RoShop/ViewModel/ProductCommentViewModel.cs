@@ -1,11 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using RoShop.Models;
 
 namespace RoShop.ViewModel
 {
   public class ProductCommentViewModel
   {
+    [Required]
+    public string Content { get; set; }
+    public int IdProduct { get; set; }
+    public Product Product { get; set; }
   }
 }

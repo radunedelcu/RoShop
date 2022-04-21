@@ -1,15 +1,14 @@
-﻿@model  Product
+﻿@model ProductCommentViewModel
 
   <!DOCTYPE html>
   <html lang="en">
   <head>
-  @*<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">*@
   <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
   <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>@Model.Name </title>
+    <title>@Model.Product.Name </title>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
 
@@ -25,19 +24,11 @@
 
               <div class="preview-pic tab-content">
                 <img width="500" height="500" class="img-thumbnail" src="data:image/jpeg;base64,
-             @Convert.ToBase64String(@Model.ProductFile.DataFiles)" />
+             @Convert.ToBase64String(@Model.Product.ProductFile.DataFiles)" />
               </div>
-              @*<ul class="preview-thumbnail nav nav-tabs">
-                <li class="active"><a data-target="#pic-1" data-toggle="tab"><img src="http://placekitten.com/200/126" /></a></li>
-                <li><a data-target="#pic-2" data-toggle="tab"><img src="http://placekitten.com/200/126" /></a></li>
-                <li><a data-target="#pic-3" data-toggle="tab"><img src="http://placekitten.com/200/126" /></a></li>
-                <li><a data-target="#pic-4" data-toggle="tab"><img src="http://placekitten.com/200/126" /></a></li>
-                <li><a data-target="#pic-5" data-toggle="tab"><img src="http://placekitten.com/200/126" /></a></li>
-              </ul>*@
-
             </div>
             <div class="details col-md-6">
-              <h3 class="product-title">@Model.Name</h3>
+              <h3 class="product-title">@Model.Product.Name</h3>
               <div class="rating">
                 <div class="stars">
                   <span class="fa fa-star checked"></span>
@@ -48,21 +39,8 @@
                 </div>
                 <span class="review-no">41 reviews</span>
               </div>
-              <p class="product-description">@Model.Description</p>
-              <h4 class="price">current price: <span>@Model.Price</span></h4>
-              @*<h5 class="sizes">
-                sizes:
-                <span class="size" data-toggle="tooltip" title="small">s</span>
-                <span class="size" data-toggle="tooltip" title="medium">m</span>
-                <span class="size" data-toggle="tooltip" title="large">l</span>
-                <span class="size" data-toggle="tooltip" title="xtra large">xl</span>
-              </h5>*@
-              @*<h5 class="colors">
-                colors:
-                <span class="color orange not-available" data-toggle="tooltip" title="Not In store"></span>
-                <span class="color green"></span>
-                <span class="color blue"></span>
-              </h5>*@
+              <p class="product-description">@Model.Product.Description</p>
+              <h4 class="price">current price: <span>@Model.Product.Price</span></h4>
               <div class="action">
                 <button class="add-to-cart btn btn-default" type="button">Add to cart</button>
                 <button class="like btn btn-default" type="button"><span class="fa fa-heart"></span></button>
@@ -77,33 +55,37 @@
     </div>
     <br />
     <br />
-    <div class="container">
-      <div class="col-lg-4 col-sm-6 text-center">
-        <div class="well">
-          <h4>Write a review</h4>
-          <div class="input-group">
-            <input type="text" id="userComment" class="form-control input-sm chat-input" placeholder="Write your message here..." />
-            <span class="input-group-btn" onclick="addComment()">
-              <a href="#" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-comment"></span> Add Comment</a>
-            </span>
+      <div class="container">
+        <div class="col-lg-4 col-sm-6 text-center">
+          <div class="well">
+            <h4>Write a review</h4>
+            <form asp-action="ViewDetails" method="post">
+              <input asp-for="@Model.IdProduct" hidden />
+              <div class="form-group">
+                <label asp-for="@Model.Content" class="control-label"></label>
+                <input asp-for="@Model.Content" class="form-control" />
+                <span asp-validation-for="@Model.Content" class="text-danger"></span>
+              </div>
+              <div class="form-group">
+                <input type="submit" value="Add" class="btn btn-primary" />
+              </div>
+            </form>
+            <hr data-brackets-id="12673">
+
+            @foreach (var comment in Model.Product.Comments)
+            {
+
+              <ul data-brackets-id="12674" id="sortable" class="list-unstyled ui-sortable">
+                <strong class="pull-left primary-font">@comment.UserEmail</strong>
+                <small class="pull-right text-muted">
+                  <span class="glyphicon glyphicon-time"></span>
+                </small>
+                <br />
+                <li class="ui-state-default">@comment.Content</li>
+              </ul>
+
+            }
           </div>
-          <hr data-brackets-id="12673">
-
-          @foreach (var comment in Model.Comments)
-          {
-
-          <ul data-brackets-id="12674" id="sortable" class="list-unstyled ui-sortable">
-            <strong class="pull-left primary-font">@comment.UserEmail</strong>
-            <small class="pull-right text-muted">
-              <span class="glyphicon glyphicon-time"></span>
-            </small>
-            <br />
-            <li class="ui-state-default">@comment.Content</li>
-            </ul>
-          
-
-          }
         </div>
-      </div>
   </body>
 </html>
