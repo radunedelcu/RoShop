@@ -1,0 +1,94 @@
+﻿@model ProductCommentViewModel
+
+  
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>@Model.Product.Name </title>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
+
+ 
+
+    <div class="container">
+      <div class="card">
+        <div class="container-fliud">
+          <div class="wrapper row">
+            <div class="preview col-md-6">
+
+              <div class="preview-pic tab-content">
+                <img width="500" height="500" class="img-thumbnail" src="data:image/jpeg;base64,
+             @Convert.ToBase64String(@Model.Product.ProductFile.DataFiles)" />
+              </div>
+            </div>
+            <div class="details col-md-6">
+              <h3 class="product-title">@Model.Product.Name</h3>
+              <div class="rating">
+                <div class="stars">
+                  <span class="fa fa-star checked"></span>
+                  <span class="fa fa-star checked"></span>
+                  <span class="fa fa-star checked"></span>
+                  <span class="fa fa-star"></span>
+                  <span class="fa fa-star"></span>
+                </div>
+                <span class="review-no">41 reviews</span>
+              </div>
+              <p class="product-description">@Model.Product.Description</p>
+              <h4 class="price">current price: <span>@Model.Product.Price</span></h4>
+              <div class="action">
+                <button class="add-to-cart btn btn-default" type="button">Add to cart</button>
+                <button class="like btn btn-default" type="button"><span class="fa fa-heart"></span></button>
+              </div>
+              <div>
+                <a asp-controller="Product" asp-action="Index" class="btn btn-outline-secondary btn-sm">Back</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br />
+    <br />
+      
+      <div class="row d-flex justify-content">
+        <div class="col-md-8 col-lg-12">
+          <div class="card shadow-0 border" style="background-color: #f0f2f5;">
+            <div class="card-body p-4">
+              <div class="form-outline mb-4">
+                <form asp-action="ViewDetails" method="post">
+                  <input asp-for="@Model.IdProduct" hidden />
+                  <div class="form-group">
+                    <label asp-for="@Model.Content" class="control-label">Comments</label>
+                    <input asp-for="@Model.Content" class="form-control" />
+                    <span asp-validation-for="@Model.Content" class="text-danger"></span>
+                  </div>
+                  <div class="form-group">
+                    <input type="submit" value="Add" class="btn btn-primary" />
+                  </div>
+                </form>
+              </div>
+
+              @foreach (var comment in Model.Product.Comments)
+      {
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                      <div class="d-flex flex-row align-items-center">
+                        <p class="small mb-0 ms-2">@comment.UserEmail</p>
+                      </div>
+                      <div class="d-flex flex-row align-items-center">
+                        <p class="small text-muted mb-0">@comment.CreatedOn</p>
+                      </div>
+                    </div>
+                    <p>@comment.Content</p>
+                  </div>
+                </div>
+
+      }
+            </div>
+          </div>
+        </div>
+      </div>
+

@@ -10,7 +10,7 @@ namespace RoShop.ViewModel
     public string Email { get; set; }
 
     [Required]
-    //[StringLength(20, MinimumLength = 5, ErrorMessage = "Password must have more then 5 characters")]
+    [StringLength(20, MinimumLength = 5, ErrorMessage = "Password must have more then 5 characters")]
     [Display(Name = "Password")]
     public string Password { get; set; }
   }

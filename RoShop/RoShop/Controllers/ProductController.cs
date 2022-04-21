@@ -229,5 +229,57 @@ namespace RoShop.Controllers
       }
       return View(productImageViewModel);
     }
+
+    [HttpGet]
+    public IActionResult ViewDetails(int? id)
+    {
+      if (id == null || id == 0)
+      {
+        return NotFound();
+      }
+      var obj = _context.Product.AsNoTracking().Join(
+        _context.ProductFile,
+        u => u.IdProductFile,
+        z => z.Id,
+        (u, z) => new Product()
+        {
+          Id = u.Id,
+          Description = u.Description,
+          Price = u.Price,
+          Name = u.Name,
+          ProductFile = z
+        }).ToList().Where(a => a.Id == id).SingleOrDefault();
+
+      List<Comment> comments = _context.Comment.Where(a => a.IdProduct == obj.Id).ToList();
+      obj.Comments = comments;
+
+      ProductCommentViewModel productCommentViewModel = new ProductCommentViewModel();
+      productCommentViewModel.Product = obj;
+      productCommentViewModel.IdProduct = obj.Id;
+
+      if (obj == null)
+      {
+        return NotFound();
+      }
+
+      return View(productCommentViewModel);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult ViewDetails(ProductCommentViewModel productCommentViewModel)
+    {
+
+      Comment comment = new Comment();
+      Product product = _context.Product.Where(a => a.Id == productCommentViewModel.IdProduct).SingleOrDefault();
+      var userEmail = HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
+      comment.IdProduct = product.Id;
+      comment.Product = product;
+      comment.UserEmail = userEmail;
+      comment.Content = productCommentViewModel.Content;
+      _context.Comment.Add(comment);
+      _context.SaveChanges();
+      return RedirectToAction("ViewDetails", new { id = product.Id });
+    }
   }
 }

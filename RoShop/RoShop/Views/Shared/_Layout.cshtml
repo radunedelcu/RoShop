@@ -39,15 +39,11 @@
                 <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Products</a>
               </li>
 
-
               <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
                 <ul class="navbar-nav ml-auto">
 
             @if (username != null)
             {
-
-
-
                   <li class="nav-item">
                     <a class="nav-link text-dark" asp-area="" asp-controller="Authenticate" asp-action="LogOut">Logout</a>
                   </li>
@@ -58,7 +54,7 @@
                     <a class="nav-link text-dark" asp-area="" asp-controller="Authenticate" asp-action="Register">Register</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link navbar-right text-dark" asp-area="" asp-controller="Authenticate" asp-action="Login">Login</a>
+                    <a class="nav-link  text-dark" asp-area="" asp-controller="Authenticate" asp-action="Login">Login</a>
                   </li>
             }
 
