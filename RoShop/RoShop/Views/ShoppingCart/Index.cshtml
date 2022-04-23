@@ -1,0 +1,19 @@
+﻿<h3>Products List</h3>
+  @foreach (var item in ViewBag.cart)
+  {
+    <div class="col mb-4">
+      <div class="card">
+        <p class="card-text">Price: @item.Product.Id</p>
+        <p class="card-text">Price: @item.Product.Name</p>
+
+        @*<img class="card-img-top" src="data:image/jpeg;base64,
+         @Convert.ToBase64String(product.ProductFile.DataFiles)" />
+    <div class="card-body">
+      <h5 class="card-title">@product.Name</h5>
+      <p class="card-text">Price: @product.Price</p>
+      <p class="card-text">Description: @product.Description</p>
+      <a asp-controller="Product" asp-action="ViewDetails" asp-route-Id="@product.Id" class="btn btn-outline-info mx-1">View Details</a>
+    </div>*@
+      </div>
+    </div>
+      }

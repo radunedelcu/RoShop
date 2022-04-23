@@ -281,5 +281,10 @@ namespace RoShop.Controllers
       _context.SaveChanges();
       return RedirectToAction("ViewDetails", new { id = product.Id });
     }
+
+    public IActionResult AddToCart()
+    {
+      return View();
+    }
   }
 }
