@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using RoShop.Data;
 using RoShop.Helpers;
 using RoShop.Models;
@@ -20,8 +21,15 @@ namespace RoShop.Controllers
     public IActionResult Index()
     {
       var cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
-      ViewBag.cart = cart;
-      ViewBag.total = cart.Sum(item => item.Product.Price * item.Quantity);
+      if (cart == null)
+      {
+        ViewBag.total = new List<Item>();
+      }
+      else
+      {
+        ViewBag.cart = cart;
+        ViewBag.total = cart.Sum(item => item.Product.Price * item.Quantity);
+      }
       return View();
     }
 
@@ -34,8 +42,18 @@ namespace RoShop.Controllers
         List<Item> cart = new List<Item>();
         cart.Add(new Item
         {
-          Product = _context.Product.Where(a => a.Id == id)
-          .SingleOrDefault(),
+          Product = _context.Product.AsNoTracking().Join(
+        _context.ProductFile,
+        u => u.IdProductFile,
+        z => z.Id,
+        (u, z) => new Product()
+        {
+          Id = u.Id,
+          Description = u.Description,
+          Price = u.Price,
+          Name = u.Name,
+          ProductFile = z
+        }).ToList().Where(a => a.Id == id).SingleOrDefault(),
           Quantity = 1
         });
         SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
@@ -52,8 +70,18 @@ namespace RoShop.Controllers
         {
           cart.Add(new Item
           {
-            Product = _context.Product.Where(a => a.Id == id)
-          .SingleOrDefault(),
+            Product = _context.Product.AsNoTracking().Join(
+        _context.ProductFile,
+        u => u.IdProductFile,
+        z => z.Id,
+        (u, z) => new Product()
+        {
+          Id = u.Id,
+          Description = u.Description,
+          Price = u.Price,
+          Name = u.Name,
+          ProductFile = z
+        }).ToList().Where(a => a.Id == id).SingleOrDefault(),
             Quantity = 1
           });
         }
