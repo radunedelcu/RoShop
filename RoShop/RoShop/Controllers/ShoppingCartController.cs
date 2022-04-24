@@ -87,7 +87,7 @@ namespace RoShop.Controllers
         }
         SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
       }
-      return RedirectToAction("Index");
+      return RedirectToAction("ViewDetails", "Product", new { id = id });
     }
 
 
