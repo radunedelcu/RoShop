@@ -28,6 +28,7 @@ namespace RoShop
 
       services.AddDistributedMemoryCache();
       services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+      services.AddSession();
       services.AddSession(options =>
       {
         // Set a short timeout for easy testing.
