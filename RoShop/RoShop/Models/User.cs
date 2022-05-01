@@ -30,6 +30,8 @@ namespace RoShop.Models
     public int IdRole { get; set; }
     public Role Role { get; set; }
     public ICollection<UserProduct> UserProducts { get; set; }
+    public ICollection<UserWishlistProduct> UserWishlistProducts { get; set; }
+
 
   }
 }

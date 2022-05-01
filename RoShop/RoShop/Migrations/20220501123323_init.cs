@@ -81,6 +81,26 @@ namespace RoShop.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserWishlistProduct",
+                columns: table => new
+                {
+                    IdUserWishlistProduct = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IdProduct = table.Column<int>(type: "int", nullable: false),
+                    IdUser = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserWishlistProduct", x => x.IdUserWishlistProduct);
+                    table.ForeignKey(
+                        name: "FK_UserWishlistProduct_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Product",
                 columns: table => new
                 {
@@ -93,6 +113,8 @@ namespace RoShop.Migrations
                     Material = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserProductIdUserProduct = table.Column<int>(type: "int", nullable: true),
                     IdUserProduct = table.Column<int>(type: "int", nullable: false),
+                    UserWishlistProductIdUserWishlistProduct = table.Column<int>(type: "int", nullable: true),
+                    IdUserWishlistProduct = table.Column<int>(type: "int", nullable: false),
                     IdProductFile = table.Column<int>(type: "int", nullable: false),
                     ProductFileId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -110,6 +132,11 @@ namespace RoShop.Migrations
                         column: x => x.UserProductIdUserProduct,
                         principalTable: "UserProduct",
                         principalColumn: "IdUserProduct");
+                    table.ForeignKey(
+                        name: "FK_Product_UserWishlistProduct_UserWishlistProductIdUserWishlistProduct",
+                        column: x => x.UserWishlistProductIdUserWishlistProduct,
+                        principalTable: "UserWishlistProduct",
+                        principalColumn: "IdUserWishlistProduct");
                 });
 
             migrationBuilder.CreateTable(
@@ -120,6 +147,7 @@ namespace RoShop.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IdProduct = table.Column<int>(type: "int", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -149,6 +177,11 @@ namespace RoShop.Migrations
                 column: "UserProductIdUserProduct");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Product_UserWishlistProductIdUserWishlistProduct",
+                table: "Product",
+                column: "UserWishlistProductIdUserWishlistProduct");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_User_RoleId",
                 table: "User",
                 column: "RoleId");
@@ -156,6 +189,11 @@ namespace RoShop.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_UserProduct_UserId",
                 table: "UserProduct",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserWishlistProduct_UserId",
+                table: "UserWishlistProduct",
                 column: "UserId");
         }
 
@@ -172,6 +210,9 @@ namespace RoShop.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserProduct");
+
+            migrationBuilder.DropTable(
+                name: "UserWishlistProduct");
 
             migrationBuilder.DropTable(
                 name: "User");

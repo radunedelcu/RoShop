@@ -10,7 +10,7 @@ using RoShop.Data;
 namespace RoShop.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220416131501_init")]
+    [Migration("20220501123323_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,6 +33,9 @@ namespace RoShop.Migrations
 
                     b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("IdProduct")
+                        .HasColumnType("int");
 
                     b.Property<int?>("ProductId")
                         .HasColumnType("int");
@@ -66,6 +69,9 @@ namespace RoShop.Migrations
                     b.Property<int>("IdUserProduct")
                         .HasColumnType("int");
 
+                    b.Property<int>("IdUserWishlistProduct")
+                        .HasColumnType("int");
+
                     b.Property<string>("Material")
                         .HasColumnType("nvarchar(max)");
 
@@ -81,11 +87,16 @@ namespace RoShop.Migrations
                     b.Property<int?>("UserProductIdUserProduct")
                         .HasColumnType("int");
 
+                    b.Property<int?>("UserWishlistProductIdUserWishlistProduct")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ProductFileId");
 
                     b.HasIndex("UserProductIdUserProduct");
+
+                    b.HasIndex("UserWishlistProductIdUserWishlistProduct");
 
                     b.ToTable("Product");
                 });
@@ -191,6 +202,29 @@ namespace RoShop.Migrations
                     b.ToTable("UserProduct");
                 });
 
+            modelBuilder.Entity("RoShop.Models.UserWishlistProduct", b =>
+                {
+                    b.Property<int>("IdUserWishlistProduct")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("IdProduct")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdUser")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("IdUserWishlistProduct");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserWishlistProduct");
+                });
+
             modelBuilder.Entity("RoShop.Models.Comment", b =>
                 {
                     b.HasOne("RoShop.Models.Product", "Product")
@@ -212,9 +246,16 @@ namespace RoShop.Migrations
                         .HasForeignKey("UserProductIdUserProduct")
                         .OnDelete(DeleteBehavior.NoAction);
 
+                    b.HasOne("RoShop.Models.UserWishlistProduct", "UserWishlistProduct")
+                        .WithMany("Products")
+                        .HasForeignKey("UserWishlistProductIdUserWishlistProduct")
+                        .OnDelete(DeleteBehavior.NoAction);
+
                     b.Navigation("ProductFile");
 
                     b.Navigation("UserProduct");
+
+                    b.Navigation("UserWishlistProduct");
                 });
 
             modelBuilder.Entity("RoShop.Models.User", b =>
@@ -236,6 +277,16 @@ namespace RoShop.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("RoShop.Models.UserWishlistProduct", b =>
+                {
+                    b.HasOne("RoShop.Models.User", "User")
+                        .WithMany("UserWishlistProducts")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("RoShop.Models.Product", b =>
                 {
                     b.Navigation("Comments");
@@ -244,9 +295,16 @@ namespace RoShop.Migrations
             modelBuilder.Entity("RoShop.Models.User", b =>
                 {
                     b.Navigation("UserProducts");
+
+                    b.Navigation("UserWishlistProducts");
                 });
 
             modelBuilder.Entity("RoShop.Models.UserProduct", b =>
+                {
+                    b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("RoShop.Models.UserWishlistProduct", b =>
                 {
                     b.Navigation("Products");
                 });
