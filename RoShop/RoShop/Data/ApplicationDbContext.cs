@@ -15,6 +15,7 @@ namespace RoShop.Data
 
     public DbSet<ProductFile> ProductFile { get; set; }
     public DbSet<Comment> Comment { get; set; }
+    public DbSet<UserWishlistProduct> UserWishlistProduct { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

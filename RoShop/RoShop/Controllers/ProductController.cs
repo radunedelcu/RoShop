@@ -282,9 +282,5 @@ namespace RoShop.Controllers
       return RedirectToAction("ViewDetails", new { id = product.Id });
     }
 
-    public IActionResult AddToCart()
-    {
-      return View();
-    }
   }
 }
