@@ -18,21 +18,23 @@ namespace RoShop.Controllers
 
     public IActionResult Index()
     {
-      //IEnumerable<Product> objList = _context.Product.AsNoTracking().Join(
-      //  _context.ProductFile,
-      //  u => u.IdProductFile,
-      //  z => z.Id,
-      //  (u, z) => new Product()
-      //  {
-      //    Id = u.Id,
-      //    Description = u.Description,
-      //    Price = u.Price,
-      //    Name = u.Name,
-      //    ProductFile = z
-      //  }).ToList();
-      return View();
+      IEnumerable<Product> objList = _context.Product.AsNoTracking().Join(
+        _context.ProductFile,
+        u => u.IdProductFile,
+        z => z.Id,
+        (u, z) => new Product()
+        {
+          Id = u.Id,
+          Description = u.Description,
+          Price = u.Price,
+          Name = u.Name,
+          ProductFile = z
+        }).ToList();
+
+      return View(objList);
     }
 
+    [HttpGet]
     public IActionResult AddToWishlist(int? id)
     {
 
@@ -53,28 +55,19 @@ namespace RoShop.Controllers
             Name = u.Name,
             ProductFile = z
           }).ToList().Where(a => a.Id == id).SingleOrDefault();
+
         return View();
       }
     }
 
+    [HttpGet]
     public IActionResult AddProductToWishlist(int? id)
     {
       if (id == null || id == 0)
       {
         return NotFound();
       }
-      var obj = _context.Product.AsNoTracking().Join(
-        _context.ProductFile,
-        u => u.IdProductFile,
-        z => z.Id,
-        (u, z) => new Product()
-        {
-          Id = u.Id,
-          Description = u.Description,
-          Price = u.Price,
-          Name = u.Name,
-          ProductFile = z
-        }).ToList().Where(a => a.Id == id).SingleOrDefault();
+      var obj = _context.Product.Where(a => a.Id == id).SingleOrDefault();
       if (obj == null)
       {
         return NotFound();
@@ -84,6 +77,8 @@ namespace RoShop.Controllers
       User user = _context.User.Where(a => a.Email == email).SingleOrDefault();
       wishlistProduct.IdProduct = obj.Id;
       wishlistProduct.IdUser = user.Id;
+      wishlistProduct.User = user;
+      wishlistProduct.Product = obj;
       _context.UserWishlistProduct.Add(wishlistProduct);
       _context.SaveChanges();
       return RedirectToAction("Index");

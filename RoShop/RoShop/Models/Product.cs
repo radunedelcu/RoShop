@@ -14,8 +14,6 @@ namespace RoShop.Models
     public string Material { get; set; }
     public UserProduct UserProduct { get; set; }
     public int IdUserProduct { get; set; }
-    public UserWishlistProduct UserWishlistProduct { get; set; }
-    public int IdUserWishlistProduct { get; set; }
     public int IdProductFile { get; set; }
 
     public ProductFile ProductFile { get; set; }
