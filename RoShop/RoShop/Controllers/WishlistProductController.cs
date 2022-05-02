@@ -18,46 +18,28 @@ namespace RoShop.Controllers
 
     public IActionResult Index()
     {
-      IEnumerable<Product> objList = _context.Product.AsNoTracking().Join(
-        _context.ProductFile,
-        u => u.IdProductFile,
-        z => z.Id,
-        (u, z) => new Product()
-        {
-          Id = u.Id,
-          Description = u.Description,
-          Price = u.Price,
-          Name = u.Name,
-          ProductFile = z
-        }).ToList();
+      string email = HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
+      User user = _context.User.Where(a => a.Email == email).SingleOrDefault();
+      List<UserWishlistProduct> userWishlistProducts = _context.UserWishlistProduct.Where(a => a.IdUser == user.Id).ToList();
 
-      return View(objList);
-    }
-
-    [HttpGet]
-    public IActionResult AddToWishlist(int? id)
-    {
-
+      List<Product> products = new List<Product>();
+      foreach (var wish in userWishlistProducts)
       {
-        if (id == null || id == 0)
-        {
-          return NotFound();
-        }
-        var obj = _context.Product.AsNoTracking().Join(
-          _context.ProductFile,
-          u => u.IdProductFile,
-          z => z.Id,
-          (u, z) => new Product()
-          {
-            Id = u.Id,
-            Description = u.Description,
-            Price = u.Price,
-            Name = u.Name,
-            ProductFile = z
-          }).ToList().Where(a => a.Id == id).SingleOrDefault();
-
-        return View();
+        Product product = _context.Product.AsNoTracking().Where(a => a.Id == wish.IdProduct).Join(
+       _context.ProductFile,
+       u => u.IdProductFile,
+       z => z.Id,
+       (u, z) => new Product()
+       {
+         Id = u.Id,
+         Description = u.Description,
+         Price = u.Price,
+         Name = u.Name,
+         ProductFile = z
+       }).SingleOrDefault();
+        products.Add(product);
       }
+      return View(products);
     }
 
     [HttpGet]
