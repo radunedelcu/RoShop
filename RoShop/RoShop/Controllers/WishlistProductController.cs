@@ -54,16 +54,40 @@ namespace RoShop.Controllers
       {
         return NotFound();
       }
-      UserWishlistProduct wishlistProduct = new UserWishlistProduct();
-      string email = HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
-      User user = _context.User.Where(a => a.Email == email).SingleOrDefault();
-      wishlistProduct.IdProduct = obj.Id;
-      wishlistProduct.IdUser = user.Id;
-      wishlistProduct.User = user;
-      wishlistProduct.Product = obj;
-      _context.UserWishlistProduct.Add(wishlistProduct);
-      _context.SaveChanges();
+      if (itemExist(obj) != true)
+      {
+
+        UserWishlistProduct wishlistProduct = new UserWishlistProduct();
+        string email = HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
+        User user = _context.User.Where(a => a.Email == email).SingleOrDefault();
+        wishlistProduct.IdProduct = obj.Id;
+        wishlistProduct.IdUser = user.Id;
+        wishlistProduct.User = user;
+        wishlistProduct.Product = obj;
+        _context.UserWishlistProduct.Add(wishlistProduct);
+        _context.SaveChanges();
+      }
       return RedirectToAction("Index");
     }
+
+    public bool itemExist(Product product)
+    {
+      var obj = _context.UserWishlistProduct.Where(a => a.IdProduct == product.Id).SingleOrDefault();
+      if (obj != null)
+        return true;
+      return false;
+    }
+
+    //public IActionResult Remove(int id)
+    //{
+    //  var obj = _context.UserWishlistProduct.Where(a => a.IdProduct == id).SingleOrDefault();
+    //  if (obj == null)
+    //  {
+    //    return NotFound();
+    //  }
+    //  _context.UserWishlistProduct.Remove(obj);
+    //  _context.SaveChanges();
+    //  return RedirectToAction("Index");
+    //}
   }
 }
