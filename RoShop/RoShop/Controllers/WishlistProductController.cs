@@ -78,16 +78,16 @@ namespace RoShop.Controllers
       return false;
     }
 
-    //public IActionResult Remove(int id)
-    //{
-    //  var obj = _context.UserWishlistProduct.Where(a => a.IdProduct == id).SingleOrDefault();
-    //  if (obj == null)
-    //  {
-    //    return NotFound();
-    //  }
-    //  _context.UserWishlistProduct.Remove(obj);
-    //  _context.SaveChanges();
-    //  return RedirectToAction("Index");
-    //}
+    public IActionResult Remove(int id)
+    {
+      var obj = _context.UserWishlistProduct.Where(a => a.IdProduct == id).SingleOrDefault();
+      if (obj == null)
+      {
+        return NotFound();
+      }
+      _context.UserWishlistProduct.Remove(obj);
+      _context.SaveChanges();
+      return RedirectToAction("Index");
+    }
   }
 }
